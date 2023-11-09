@@ -59,11 +59,13 @@ public class Robot extends TimedRobot {
     extendSub.ExtenderSRXsettings();
     gripperSub.GripperSRXsettings();
     rotationSub.RotaterSRXsettings();
+    
   //NOT in robotcontainer due to only one run needed
 
 
     // schedule the autonomous command
    //add on to dashboard to run autonomous functionally 
+   
   
    SmartDashboard.putData("Auton Choice", m_chooser);
    

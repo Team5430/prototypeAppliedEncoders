@@ -20,14 +20,28 @@ public static double x = 0;
 public static double y = 0;
 public static double z = 0;
 public static double degrees = 0; 
-public static double wheelDiameter = 3;
+//JL, diameter in inches
+public static double wheelDiameter = 6;
+//JL, calculates circumference using diameter
 public static double wheelCircumference = Math.PI * wheelDiameter;
 public static double encoderPos = 0;
 public static double previousEncoderPos = 0;
+
+public static double leftEncoderRots = 0;
+public static double rightEncoderRots = 0;
+
+public static double previousLeftWheelRots = 0;
+public static double previousRightWheelRots = 0;
+
+public static double leftWheelRots = 0;
+public static double rightWheelRots = 0;
+
 public static double wanted = 0;
 public static double error = 0;
 public static double magicNumber = 0.000025;
 public static double boundsOfDegree = 10;
+public static double encoderTicks = 2048;
+public static double gearRatio = 10.71;
 
 
 

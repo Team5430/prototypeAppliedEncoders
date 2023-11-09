@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -73,11 +76,15 @@ public final static CommandJoystick m_Controller0 = new CommandJoystick(Operator
     Trigger joyButtonRight = m_JoystickRight.button(3);
     Trigger calibButton = m_Controller0.button(2);
     Trigger zeroYaw = m_Controller0.button(3);
-    
+    Trigger runDistButton = m_Controller0.button(1);
+    Trigger depressedButton = m_Controller0.button(4); 
+   
     joyButtonLeft.onTrue(new InstantCommand(m_DriveTrain:: VariableSpeedIncrease, m_DriveTrain));
     joyButtonRight.onTrue(new InstantCommand(m_DriveTrain:: VariableSpeedDecrease, m_DriveTrain));
      calibButton.onTrue(new InstantCommand(m_DriveTrain:: calibrateGyro));
     zeroYaw.onTrue(new InstantCommand(m_DriveTrain:: gyro0Yaw)); 
+    runDistButton.onTrue(new InstantCommand(m_DriveTrain:: driveInDistanceUpdated));
+    depressedButton.onTrue(new InstantCommand(m_DriveTrain:: easyWayOut));
   }
 
 public Command getAuton(){
