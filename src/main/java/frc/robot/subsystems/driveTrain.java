@@ -19,8 +19,8 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-//import edu.wpi.first.networktables.NetworkTable;
-//import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import java.lang.Math;
 
 import java.util.Map;
@@ -34,6 +34,7 @@ public class driveTrain extends SubsystemBase  {
       //organizes motor conrollers into groups, left and right respectively
     final static MotorControllerGroup leftGroup = new MotorControllerGroup(backLeftMotor, frontLeftMotor);
     final static MotorControllerGroup rightGroup = new MotorControllerGroup(backRightMotor, frontRightMotor);
+
     static SupplyCurrentLimitConfiguration configTalonCurrent = new SupplyCurrentLimitConfiguration(true,55,0,0);
 
 
@@ -44,8 +45,14 @@ public class driveTrain extends SubsystemBase  {
 
     static Timer dTimer = new Timer();    
 
+    static double setPower = 0;
+    static double setDist = 0;
+
+    
+
 //Motor settings
     public static void driveSettings(){
+      rightGroup.setInverted(true);
       frontRightMotor.configSupplyCurrentLimit(configTalonCurrent);
       frontLeftMotor.configSupplyCurrentLimit(configTalonCurrent);
       backLeftMotor.configSupplyCurrentLimit(configTalonCurrent);
@@ -65,10 +72,10 @@ public class driveTrain extends SubsystemBase  {
     if(Constants.multiplier < 0){
       
       leftGroup.set(Math.sin(left * Constants.multiplier)* -Math.sin(left * Constants.multiplier));
-      rightGroup.set(Math.sin(-right * Constants.multiplier) * -Math.sin(-right * Constants.multiplier)); 
+      rightGroup.set(Math.sin(right * Constants.multiplier) * -Math.sin(right * Constants.multiplier)); 
     }else{
       leftGroup.set(Math.sin(left * Constants.multiplier)* Math.sin(left * Constants.multiplier));
-      rightGroup.set(Math.sin(-right * Constants.multiplier) * Math.sin(-right * Constants.multiplier));
+      rightGroup.set(Math.sin(right * Constants.multiplier) * Math.sin(right * Constants.multiplier));
     }
   }
 //Auto Drive
@@ -131,6 +138,8 @@ public class driveTrain extends SubsystemBase  {
             
           }
         }
+        leftGroup.set(0);
+          rightGroup.set(0);
       }
 
       
@@ -155,7 +164,10 @@ public class driveTrain extends SubsystemBase  {
               rightGroup.set(0);
             }
           }
+          leftGroup.set(0);
+          rightGroup.set(0);
         }
+        
 
 
       //going to assume a wheel on the turning point spins once every two rotation on the turning 1:2
@@ -216,6 +228,7 @@ public class driveTrain extends SubsystemBase  {
   
 
   public static void initShuffleBoardWidgets(){
+          
     Shuffleboard.getTab("SmartDashboard")
       .add("Dist (in)", 60)
       .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
@@ -224,7 +237,7 @@ public class driveTrain extends SubsystemBase  {
     Shuffleboard.getTab("SmartDashboard")
       .add("Power", 0.25)
       .withWidget(BuiltInWidgets.kNumberSlider) // specify the widget here
-      .withProperties(Map.of("min", -1, "max", 1))
+      .withProperties(Map.of("min", 0, "max", 1))
       .getEntry();
     //Shuffleboard.getTab("Smartdashboard").
   }
@@ -238,17 +251,21 @@ public class driveTrain extends SubsystemBase  {
 
     @Override
     public void periodic() {
-
+      
+    //backLeftMotor.setSensorPhase(false);
+    //backLeftMotor.setInverted(false);
      Constants.encoderPos = (backLeftMotor.getSelectedSensorPosition() / 2048) * 360;
      //every revolution on the motor is now worth 360, 
       double encoderVel = (backLeftMotor.getSelectedSensorVelocity() / 2048) * 360 * 10;
       Constants.error = Constants.wanted - Constants.encoderPos;
 
       Constants.leftEncoderRots = (backLeftMotor.getSelectedSensorPosition() / 2048);
-      Constants.rightEncoderRots = (backRightMotor.getSelectedSensorPosition() / 2048) ;
+      Constants.rightEncoderRots = -(backRightMotor.getSelectedSensorPosition() / 2048);
 
       Constants.leftWheelRots = Constants.leftEncoderRots / 10.71;
       Constants.rightWheelRots = Constants.rightEncoderRots / 10.71;
+
+      
       
       //every revolution on the motor is now worth 360, 
     
