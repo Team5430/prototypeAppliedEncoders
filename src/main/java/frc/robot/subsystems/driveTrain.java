@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
@@ -18,10 +19,14 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
 public class driveTrain extends SubsystemBase  {
+
    final static  WPI_TalonFX backRightMotor = new WPI_TalonFX(Constants.CANid.kBackRightFX);
    final static  WPI_TalonFX backLeftMotor = new WPI_TalonFX(Constants.CANid.kBackLeftFX);
    final static  WPI_TalonFX frontRightMotor = new WPI_TalonFX(Constants.CANid.kFrontRightFX);
    final static  WPI_TalonFX frontLeftMotor = new WPI_TalonFX(Constants.CANid.kFrontLeftFX);
+   final static WPI_TalonFX testMotor = new WPI_TalonFX(Constants.CANid.kTestMotorFX);
+
+
       //organizes motor conrollers into groups, left and right respectively
     final static MotorControllerGroup leftGroup = new MotorControllerGroup(backLeftMotor, frontLeftMotor);
     final static MotorControllerGroup rightGroup = new MotorControllerGroup(backRightMotor, frontRightMotor);
@@ -145,9 +150,37 @@ public class driveTrain extends SubsystemBase  {
       }
     );
   }
+    public void motorTest(){
 
-    @Override
-    public void periodic() {
+      double magic = testMotor.getSelectedSensorPosition() + 10240;
+
+      while(testMotor.getSelectedSensorPosition() <= magic){
+      testMotor.set(ControlMode.PercentOutput, 0.5);}
+      testMotor.set(ControlMode.PercentOutput, 0);
+
+      }
+    
+
+
+
+
+    public void driveRotations(double rotations){
+      // rotations is how much motor rotates
+      testMotor.setSelectedSensorPosition(0);// starts at 0
+//getSelectedSensorPosition is your current position
+      double limit = testMotor.getSelectedSensorPosition() + rotations * 2048;
+      while(testMotor.getSelectedSensorPosition() <= limit){
+        testMotor.set(ControlMode.PercentOutput, 0.1);//run the rive
+        updateVals();//UPDATE VALUES CONSTANTLY WHILE RUNNING PROGRAM
+      }
+         testMotor.setSelectedSensorPosition(0);
+         testMotor.set(ControlMode.PercentOutput, 0.0);// sets the encoder ticks to zero
+        
+
+      }
+  
+
+    public void updateVals() {
 
      Constants.encoderPos = (backLeftMotor.getSelectedSensorPosition() / 2048) * 360;
      //every revolution on the motor is now worth 360, 
@@ -165,6 +198,8 @@ public class driveTrain extends SubsystemBase  {
       SmartDashboard.putNumber("Y Accel", driveTrain.getAccelY());
       SmartDashboard.putNumber("Z Accel", driveTrain.getAccelz());
       SmartDashboard.putNumber("Pitch",  driveTrain.getGyroPitch());
+      SmartDashboard.putNumber("tick", driveTrain.testMotor.getSelectedSensorPosition());
+
       
 /*     
 //Widget testing on shuffleboard 
@@ -186,7 +221,13 @@ public class driveTrain extends SubsystemBase  {
 */
 
     }
+
+    public void diveRotations(int i) {
+    }
     
   //if you want to add anything, make other functions to use                                                                                                                                  
 
 }
+
+
+ 

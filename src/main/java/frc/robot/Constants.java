@@ -43,6 +43,7 @@ public static double boundsOfDegree = 10;
     public static final int kBackLeftFX = 3;
     public static final int kFrontRightFX = 4;
     public static final int kFrontLeftFX = 5;
+    public static final int kTestMotorFX = 15;
 
   }
   public static class OperatorConstants {
