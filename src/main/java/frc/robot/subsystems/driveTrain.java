@@ -159,8 +159,57 @@ public class driveTrain extends SubsystemBase  {
       testMotor.set(ControlMode.PercentOutput, 0);
 
       }
+    public void turn90degrees(){
+      
+      double wheelRotations = 1.58; // only one wheel rotation(12) but 90 degrees
+      double motorRotations = wheelRotations * 10.71;
+      double tickNum =motorRotations * 2048 ;
+      double magical = frontRightMotor.getSelectedSensorPosition();
+      while ((magical - tickNum) <= frontRightMotor.getSelectedSensorPosition()){
+        backRightMotor.set(-.7);
+        backLeftMotor.set(-.7);
+        frontRightMotor.set(-.7);
+        frontLeftMotor.set(-.7);
+        updateVals();
+      }
+        backRightMotor.set(0);
+        backLeftMotor.set(0);
+        frontRightMotor.set(0);
+        frontLeftMotor.set(0);
+        frontRightMotor.setSelectedSensorPosition(0);
+
+
+    }
+  
+    
+    public void distanceTravel(double distanceft){
+      double distanceInches = distanceft * 12;
+      double wheelRotations = distanceInches / (6 * Math.PI);
+      double motorRotations = wheelRotations * 10.71;
+      double tickNum = motorRotations * 2048;
     
 
+      backLeftMotor.setSelectedSensorPosition(0);
+      backRightMotor.setSelectedSensorPosition(0);
+      frontLeftMotor.setSelectedSensorPosition(0);
+      frontRightMotor.setSelectedSensorPosition(0);
+
+      double initial = frontRightMotor.getSelectedSensorPosition();
+
+      while ((tickNum + initial) >= frontRightMotor.getSelectedSensorPosition()){
+        backRightMotor.set(.7);
+        backLeftMotor.set(-.7);
+        frontRightMotor.set(.7);
+        frontLeftMotor.set(-.7);
+        updateVals();
+      }
+        backRightMotor.set(0);
+        backLeftMotor.set(0);
+        frontRightMotor.set(0);
+        frontLeftMotor.set(0);
+
+
+    }
 
 
 
@@ -168,8 +217,9 @@ public class driveTrain extends SubsystemBase  {
       // rotations is how much motor rotates
       testMotor.setSelectedSensorPosition(0);// starts at 0
 //getSelectedSensorPosition is your current position
-      double limit = testMotor.getSelectedSensorPosition() + rotations * 2048;
-      while(testMotor.getSelectedSensorPosition() <= limit){
+      double tickNum = testMotor.getSelectedSensorPosition() + rotations * 2048;
+      //finds the tick number
+      while(testMotor.getSelectedSensorPosition() <= tickNum){
         testMotor.set(ControlMode.PercentOutput, 0.1);//run the rive
         updateVals();//UPDATE VALUES CONSTANTLY WHILE RUNNING PROGRAM
       }
@@ -180,12 +230,13 @@ public class driveTrain extends SubsystemBase  {
       }
   
 
-    public void updateVals() {
+     public void updateVals() {
 
      Constants.encoderPos = (backLeftMotor.getSelectedSensorPosition() / 2048) * 360;
      //every revolution on the motor is now worth 360, 
-      double encoderVel = (backLeftMotor.getSelectedSensorVelocity() / 2048) * 360 * 10;
-      Constants.error = Constants.wanted - Constants.encoderPos;
+     double encoderVel = (backLeftMotor.getSelectedSensorVelocity() / 2048) * 360 * 10;
+     Constants.error = Constants.wanted - Constants.encoderPos;
+      
 
 
   // JL: This deploys data to the SmartDashboard directly, but can't do much more than that.
@@ -198,25 +249,22 @@ public class driveTrain extends SubsystemBase  {
       SmartDashboard.putNumber("Y Accel", driveTrain.getAccelY());
       SmartDashboard.putNumber("Z Accel", driveTrain.getAccelz());
       SmartDashboard.putNumber("Pitch",  driveTrain.getGyroPitch());
-      SmartDashboard.putNumber("tick", driveTrain.testMotor.getSelectedSensorPosition());
-
-      
-/*     
-//Widget testing on shuffleboard 
+      SmartDashboard.putNumber("tick", driveTrain.frontRightMotor.getSelectedSensorPosition());
+/*//Widget testing on shuffleboard 
     Shuffleboard.getTab("SmartDashboard")
-      .add("Angle", driveTrain.getGyroAngle()).withWidget(BuiltInWidgets.kGyro);
+    .add("Angle", driveTrain.getGyroAngle()).withWidget(BuiltInWidgets.kGyro);
 
     Shuffleboard.getTab("SmartDashboard")
-      .add("Yaw", driveTrain.getGyroYaw()).withWidget(BuiltInWidgets.kGyro);
+    .add("Yaw", driveTrain.getGyroYaw()).withWidget(BuiltInWidgets.kGyro);
 
     Shuffleboard.getTab("SmartDashboard")
-      .add("Pitch", driveTrain.getGyroPitch()).withWidget(BuiltInWidgets.kGyro);
+    .add("Pitch", driveTrain.getGyroPitch()).withWidget(BuiltInWidgets.kGyro);
 
     Shuffleboard.getTab("SmartDashboard") 
-      .add();
+    .add();
     
-    Shuffleboard.getTab("SmartDashboard")
-      .add("Roll", driveTrain.getGyroroll()).withWidget(BuiltInWidgets.kField);
+   // Shuffleboard.getTab("SmartDashboard")
+    // .add("Roll", driveTrain.getGyroroll()).withWidget(BuiltInWidgets.kField);
     
 */
 
@@ -227,7 +275,7 @@ public class driveTrain extends SubsystemBase  {
     
   //if you want to add anything, make other functions to use                                                                                                                                  
 
-}
+  }
 
 
  

@@ -124,8 +124,11 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     
-   mdrivetrain.driveRotations(5);
-   
+   System.out.println("Test");
+  mdrivetrain.distanceTravel(12.5);
+System.out.println("Tjndjifernjrenkrfnio");
+  mdrivetrain.turn90degrees();
+
 
 
   }

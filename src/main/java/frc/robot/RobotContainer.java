@@ -73,11 +73,17 @@ public final static CommandJoystick m_Controller0 = new CommandJoystick(Operator
     Trigger joyButtonRight = m_JoystickRight.button(3);
     Trigger calibButton = m_Controller0.button(2);
     Trigger zeroYaw = m_Controller0.button(3);
+    Trigger move = m_Controller0.button(4);
     
     joyButtonLeft.onTrue(new InstantCommand(m_DriveTrain:: VariableSpeedIncrease, m_DriveTrain));
     joyButtonRight.onTrue(new InstantCommand(m_DriveTrain:: VariableSpeedDecrease, m_DriveTrain));
      calibButton.onTrue(new InstantCommand(m_DriveTrain:: calibrateGyro));
     zeroYaw.onTrue(new InstantCommand(m_DriveTrain:: gyro0Yaw)); 
+    
+  }
+
+private driveTrain distanceTravel(int i) {
+    return null;
   }
 
 public Command getAuton(){
