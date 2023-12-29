@@ -74,14 +74,20 @@ public final static CommandJoystick m_Controller0 = new CommandJoystick(Operator
     Trigger calibButton = m_Controller0.button(2);
     Trigger zeroYaw = m_Controller0.button(3);
     Trigger move = m_Controller0.button(4);
+    Trigger automove = m_JoystickRight.button(1);
+    Trigger automovebackwards = m_JoystickLeft.button(1);
+    Trigger autorotateclockwise = m_JoystickRight.button(2);
+    Trigger autorotatecounterclockwise = m_JoystickLeft.button(2);
     
     joyButtonLeft.onTrue(new InstantCommand(m_DriveTrain:: VariableSpeedIncrease, m_DriveTrain));
     joyButtonRight.onTrue(new InstantCommand(m_DriveTrain:: VariableSpeedDecrease, m_DriveTrain));
-     calibButton.onTrue(new InstantCommand(m_DriveTrain:: calibrateGyro));
+    calibButton.onTrue(new InstantCommand(m_DriveTrain:: calibrateGyro));
     zeroYaw.onTrue(new InstantCommand(m_DriveTrain:: gyro0Yaw)); 
-    
+    //automove.onTrue(new InstantCommand(m_DriveTrain:: distancedriveforDrive)); //automatically moves forward for x feet
+    //automovebackwards.onTrue(new InstantCommand(m_DriveTrain:s: distancedriveforDrivebackwards)); // automatically moves backwareds for x feet same as number from automove
+   // autorotateclockwise.onTrue(new InstantCommand(m_DriveTrain:: turn90degrees); // automatically rotates clockwise
+    //autorotatecounterclockwise.onTrue(new InstantCommand(m_DriveTrain:: turn90degreescounter); // automatically rotates counter clockwise
   }
-
 private driveTrain distanceTravel(int i) {
     return null;
   }
