@@ -18,6 +18,7 @@ import frc.robot.Constants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 
+
 public class driveTrain extends SubsystemBase  {
 
    final static  WPI_TalonFX backRightMotor = new WPI_TalonFX(Constants.CANid.kBackRightFX);
@@ -37,7 +38,8 @@ public class driveTrain extends SubsystemBase  {
     final static AHRS ahrs = new AHRS(Port.kUSB1);
 
     static Timer dTimer = new Timer();    
-
+    // variables
+    public int GlobalSpeed = 5; //i had to use a public variable cause instant commands dont accept methods that use parameters;
 //Motor settings
     public static void driveSettings(){
       frontRightMotor.configSupplyCurrentLimit(configTalonCurrent);
@@ -160,12 +162,11 @@ public class driveTrain extends SubsystemBase  {
 
       }
     public void turn90degrees(){
-      
-      double wheelRotations = 1.58; // only one wheel rotation(12) but 90 degrees
+      double wheelRotations = 1.56; // only one wheel rotation(12) but 90 degrees
       double motorRotations = wheelRotations * 10.71;
-      double tickNum =motorRotations * 2048 ;
+      double tickNum = motorRotations * 2048 ;
       double magical = frontRightMotor.getSelectedSensorPosition();
-      while ((magical - tickNum) <= frontRightMotor.getSelectedSensorPosition()){
+      while (tickNum >= frontRightMotor.getSelectedSensorPosition()){
         backRightMotor.set(-.7);
         backLeftMotor.set(-.7);
         frontRightMotor.set(-.7);
@@ -180,10 +181,29 @@ public class driveTrain extends SubsystemBase  {
 
 
     }
-  
-    
-    public void distanceTravel(double distanceft){
-      double distanceInches = distanceft * 12;
+    public void turn90degreescounter(){
+      double wheelRotations = 1.56; // only one wheel rotation(12) but 90 degrees
+      double motorRotations = wheelRotations * 10.71;
+      double tickNum = motorRotations * 2048 ;
+      //double magical = frontRightMotor.getSelectedSensorPosition();
+      while (tickNum >= frontRightMotor.getSelectedSensorPosition()){
+        backRightMotor.set(.7);
+        backLeftMotor.set(.7);
+        frontRightMotor.set(.7);
+        frontLeftMotor.set(.7);
+        updateVals();
+      }
+        backRightMotor.set(0);
+        backLeftMotor.set(0);
+        frontRightMotor.set(0);
+        frontLeftMotor.set(0);
+        frontRightMotor.setSelectedSensorPosition(0);
+
+
+    }
+
+    public void distancedriveforDrive(){
+      double distanceInches =  GlobalSpeed * 12;
       double wheelRotations = distanceInches / (6 * Math.PI);
       double motorRotations = wheelRotations * 10.71;
       double tickNum = motorRotations * 2048;
@@ -197,10 +217,39 @@ public class driveTrain extends SubsystemBase  {
       double initial = frontRightMotor.getSelectedSensorPosition();
 
       while ((tickNum + initial) >= frontRightMotor.getSelectedSensorPosition()){
-        backRightMotor.set(.7);
-        backLeftMotor.set(-.7);
-        frontRightMotor.set(.7);
-        frontLeftMotor.set(-.7);
+        backRightMotor.set(1);
+        backLeftMotor.set(-1);
+        frontRightMotor.set(1);
+        frontLeftMotor.set(-1);
+        updateVals();
+      }
+        backRightMotor.set(0);
+        backLeftMotor.set(0);
+        frontRightMotor.set(0);
+        frontLeftMotor.set(0);
+
+
+    }
+    
+ public void distancedriveforDrivebackwards(){
+      double distanceInches = -GlobalSpeed * 12;
+      double wheelRotations = distanceInches / (6 * Math.PI);
+      double motorRotations = wheelRotations * 10.71;
+      double tickNum = motorRotations * 2048;
+    
+
+      backLeftMotor.setSelectedSensorPosition(0);
+      backRightMotor.setSelectedSensorPosition(0);
+      frontLeftMotor.setSelectedSensorPosition(0);
+      frontRightMotor.setSelectedSensorPosition(0);
+
+      double initial = frontRightMotor.getSelectedSensorPosition();
+
+      while ((tickNum + initial) >= frontRightMotor.getSelectedSensorPosition()){
+        backRightMotor.set(1);
+        backLeftMotor.set(-1);
+        frontRightMotor.set(1);
+        frontLeftMotor.set(-1);
         updateVals();
       }
         backRightMotor.set(0);

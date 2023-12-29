@@ -14,7 +14,7 @@ import frc.robot.subsystems.driveTrain;
 import frc.robot.subsystems.extendSub;
 import frc.robot.subsystems.gripperSub;
 import frc.robot.subsystems.rotationSub;
-
+import edu.wpi.first.wpilibj.Timer;
 
 
 
@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   //making drivetrain as function for m_chooser
   private final driveTrain mdrivetrain = new driveTrain();
 
-  
+  public Timer timerMark = new Timer();
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -42,8 +42,9 @@ public class Robot extends TimedRobot {
 
   public static int autoStatus = 0;
 
-
   
+  
+
   // Creates a new AHRS object under ahrs.
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -123,11 +124,13 @@ public class Robot extends TimedRobot {
     if(m_autonomousCommand != null){
       m_autonomousCommand.cancel();
     }
+    timerMark.start();
     
-   System.out.println("Test");
-  mdrivetrain.distanceTravel(12.5);
-System.out.println("Tjndjifernjrenkrfnio");
-  mdrivetrain.turn90degrees();
+   //System.out.println("Test");
+   //mdrivetrain.distanceTravel(12.5);
+  //System.out.println("Tjndjifernjrenkrfnio"); 
+   //mdrivetrain.turn90degrees();
+
 
 
 
